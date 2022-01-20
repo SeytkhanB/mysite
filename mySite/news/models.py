@@ -10,6 +10,9 @@ class News(models.Model):
     is_published = models.BooleanField(default=True, verbose_name='Опубликовано')
     category = models.ForeignKey('Category', on_delete=models.PROTECT, null=True, verbose_name='Категория')
 
+    def myfunc(self):
+        return 'Hello from class myfunc'
+
     def __str__(self):
         return self.title
 
@@ -21,6 +24,9 @@ class News(models.Model):
 
 class Category(models.Model):
     title = models.CharField(max_length=150, db_index=True, verbose_name='Наименование категории')
+
+    def mycategory(self):
+        return 'Hello from class category'
 
     def __str__(self):
         return self.title
