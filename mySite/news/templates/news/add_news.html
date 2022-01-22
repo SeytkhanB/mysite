@@ -1,0 +1,85 @@
+
+
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ news_item.title }}
+{% endblock %}
+
+
+{% block news_item_title %}
+    {{ news_item.title }}
+{% endblock %}
+
+
+{% block sidebar %}
+{% include 'inc/_sidebar.html' %}
+{% endblock %}
+
+
+{% block content %}
+
+<h1>Adding news</h1>
+
+<form action="{% url 'add_news' %}" method="post">
+    {% csrf_token %}
+
+    <!-- This way is auto -->
+    {{ form.as_p }}
+
+    <!-- --------------------------------- -->
+    <!-- This way is completely manual -->
+    {% comment %}
+    {{  form.non_field.errors }}
+    <div class="form-group">
+        <label for="{{ label.title.id_for_label }}" class="form-label">Наименование: </label>
+            {{ form.title }}
+        <div class="invalid-feedback">
+            {{ form.title.errors }}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="{{ label.content.id_for_label }}" class="form-label">Контент: </label>
+            {{ form.content }}
+        <div class="invalid-feedback">
+            {{ form.content.errors }}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="{{ label.is_published.id_for_label }}" class="form-label">Опубликовано: </label>
+            {{ form.is_published }}
+        <div class="invalid-feedback">
+            {{ form.is_published.errors }}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="{{ label.category.id_for_label }}" class="form-label">Категория: </label>
+            {{ form.category }}
+        <div class="invalid-feedback">
+            {{ form.category.errors }}
+        </div>
+    </div>
+    <br>
+    {% endcomment %}
+
+    <!-- --------------------------------- -->
+    <!-- This way semi-auto -->
+    {% comment %}
+    {% for field in form %}
+    <div class="form_group">
+        {{ field.label_tag }}
+        {{ field }}
+        <div class="invalid-feedback">
+            {{ field.errors }}
+        </div>
+    </div>
+    {% endfor %}
+    <br>
+    {% endcomment %}
+
+
+    <button type="submit" class="btn btn-primary">Add news</button>
+</form>
+
+{% endblock %}
+
