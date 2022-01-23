@@ -1,8 +1,41 @@
 
 from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic import ListView
+
 from .models import News, Category
 from .forms import NewsForm
 
+
+class HomeNews(ListView):
+    model = News
+    template_name = 'news/home_news_list.html'
+    context_object_name = 'news'
+    # extra_context = {'title': 'Main'}
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(HomeNews, self).get_context_data(**kwargs)
+        context['title'] = 'Main page'
+        return context
+
+    def get_queryset(self):
+        return News.objects.filter(is_published=True)
+
+
+class NewsByCategory(ListView):
+    model = News
+    template_name = 'news/home_news_list.html'
+    context_object_name = 'news'
+    allow_empty = False
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(NewsByCategory, self).get_context_data(**kwargs)
+        context['title'] = Category.objects.get(pk=self.kwargs['category_id'])
+        return context
+
+    def get_queryset(self):
+        return News.objects.filter(category_id=self.kwargs['category_id'], is_published=True)
+
+"""
 def index(request):
     news = News.objects.all()
     context = {
@@ -10,7 +43,7 @@ def index(request):
         'title': 'News List',
     }
     return render(request, template_name='news/index.html', context=context)
-
+"""
 
 def get_category(request, category_id):
     news = News.objects.filter(category_id=category_id)
@@ -35,7 +68,8 @@ def add_news(request):
     if request.method == 'POST':
         form = NewsForm(request.POST)
         if form.is_valid():
-            news = News.objects.create(**form.cleaned_data)        # ** means unpacking dictionaries
+            # news = News.objects.create(**form.cleaned_data)        # ** means unpacking dictionaries
+            news = form.save()
             return redirect(news)
     else:
         form = NewsForm
