@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
     'news.apps.NewsConfig',             # this line similar to -> 'news',
 ]
 
@@ -48,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'mySite.urls'
@@ -76,13 +78,15 @@ WSGI_APPLICATION = 'mySite.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dbdjango',
-        'USER': 'seytkhan',
-        'PASSWORD': 'ffhhgsgsb',
-        'HOST': 'localhost',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+
+        # Changing sqlite3 ↑ to mysql ↓
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'dbdjango',
+        # 'USER': 'seytkhan',
+        # 'PASSWORD': 'ffhhgsgsb',
+        # 'HOST': 'localhost',
     }
 }
 
@@ -129,6 +133,8 @@ STATICFILES_DIRS = [
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+INTERNAL_IPS = ["127.0.0.1"]
 
 
 # Default primary key field type

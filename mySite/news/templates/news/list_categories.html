@@ -3,6 +3,7 @@
     {% for item_categories in categories %}
     <a href="{{ item_categories.get_absolute_url }}" class="list-group-item list-group-item-action">
         {{ item_categories.title }}
+        <span class="badge bg-primary rounded-pill category_badge">{{ item_categories.cnt }}</span>
     </a>
     {% endfor %}
 </div>
