@@ -5,13 +5,16 @@ from django.views.generic import ListView, DetailView, CreateView
 from .models import News, Category
 from .forms import NewsForm
 from django.urls import reverse_lazy
+from .utils import MyMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 # Changing controller functions to controller CLASSES below ↓
-class HomeNews(ListView):
+class HomeNews(MyMixin, ListView):
     model = News
     template_name = 'news/home_news_list.html'
     context_object_name = 'news'
+    mixin_prop = 'hello world this is mixin'
     # extra_context = {'title': 'Main'}
 
     # if we don't use method get_queryset(self): which is below then
@@ -21,7 +24,8 @@ class HomeNews(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(HomeNews, self).get_context_data(**kwargs)
-        context['title'] = 'Main page'
+        context['title'] = self.get_upper('main page')
+        context['mixin_prop'] = self.get_prop()
         return context
 
     def get_queryset(self):
@@ -39,7 +43,7 @@ def index(request):
 """
 
 # Changing controller functions to CONTROLLER CLASSES below ↓
-class NewsByCategory(ListView):
+class NewsByCategory(MyMixin, ListView):
     model = News
     template_name = 'news/home_news_list.html'
     context_object_name = 'news'
@@ -52,7 +56,7 @@ class NewsByCategory(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(NewsByCategory, self).get_context_data(**kwargs)
-        context['title'] = Category.objects.get(pk=self.kwargs['category_id'])
+        context['title'] = self.get_upper(Category.objects.get(pk=self.kwargs['category_id']))
         return context
 
     def get_queryset(self):
@@ -92,10 +96,14 @@ def view_news(request, news_id):
 
 
 # Changing controller functions to CONTROLLER CLASSES below ↓
-class CreateNews(CreateView):
+class CreateNews(LoginRequiredMixin, CreateView):
     form_class = NewsForm
     template_name = 'news/add_news.html'
     # success_url = reverse_lazy('home')        # I don't know why this line is here
+
+    # login_url = '/admin/'                     # we will go to the admin
+    # login_url = reverse_lazy('home')          # we will go to the home page
+    raise_exception = True                      # we will go to the 403 page
 
 # This is controller functions
 """
