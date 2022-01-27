@@ -1,10 +1,11 @@
 
 
 from django.urls import path
-from .views import HomeNews, NewsByCategory, ViewNews, CreateNews, forTest
+from .views import HomeNews, NewsByCategory, ViewNews, CreateNews
 
 urlpatterns = [
-    path('test/', forTest, name='fotTest'),
+    # path('test/', forTest, name='fotTest'),
+    path('test/', HomeNews.as_view(), name='forTest'),
 
     # path('', index, name='home'),
     path('', HomeNews.as_view(), name='home'),
