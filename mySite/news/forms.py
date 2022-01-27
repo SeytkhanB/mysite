@@ -3,6 +3,20 @@ import re
 from django.core.exceptions import ValidationError
 from django import forms
 from .models import News
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+
+class UserRegisterForm(UserCreationForm):
+    username = forms.CharField(label='Name', widget=forms.TextInput(attrs={'class': 'form-control'}))
+    # we can use    help_text="something"   before widget=forms. etc
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    password2 = forms.CharField(label='Confirm the password', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    email = forms.EmailField(label='E-mail', help_text='Please use the correct email address', widget=forms.EmailInput(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password1', 'password2')
+
 
 class NewsForm(forms.ModelForm):
     class Meta:

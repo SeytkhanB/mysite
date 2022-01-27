@@ -19,13 +19,33 @@
 {% include 'inc/_nav.html' %}
 
 <div class="container mt-3">
-    <h5>Amount of news: {{ news.count }}</h5>
+    <!-- <h5>Amount of news: {{ news.count }}</h5> -->
     <div class="row">
 
         <div class="col-md-3">
             {% block sidebar %}{% endblock %}
         </div>
         <div class="col-md-9">
+
+            {% if messages %}
+
+                {% for message in messages %}
+
+                    {% if message.tags == 'error' %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ message }}
+                        </div>
+                    {% else %}
+                          <div class="alert alert-{{ message.tags }}" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endif %}
+
+                {% endfor %}
+
+            {% endif %}
+
+
             {% block content %}{% endblock %}
 
             {% if page_obj.has_other_pages %}

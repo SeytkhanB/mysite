@@ -1,13 +1,32 @@
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
+from django.core.paginator import Paginator
 
 from django.views.generic import ListView, DetailView, CreateView
 from .models import News, Category
-from .forms import NewsForm
+from .forms import NewsForm, UserRegisterForm
 from .utils import MyMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.paginator import Paginator
+from django.contrib import messages
+
+
+def register(request):
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'You have successfully registered')
+            return redirect('login')
+        else:
+            messages.error(request, 'Error registration')
+    else:
+        form = UserRegisterForm()
+    return render(request, 'news/register.html', {'form': form})
+
+
+def login(request):
+    return render(request, 'news/login.html')
 
 
 # This is controller functions
@@ -19,7 +38,6 @@ def forTest(request):
     page_obj = paginator.get_page(page_number)
     return render(request, 'news/forTest.html', {'page_obj': page_obj})
 """
-
 
 
 # Changing controller functions to controller CLASSES below ↓
@@ -56,6 +74,7 @@ def index(request):
     return render(request, template_name='news/index.html', context=context)
 """
 
+
 # Changing controller functions to CONTROLLER CLASSES below ↓
 class NewsByCategory(MyMixin, ListView):
     model = News
@@ -91,6 +110,7 @@ def get_category(request, category_id):
     }
     return render(request, template_name='news/category.html', context=context)
 """
+
 
 # Changing controller functions to CONTROLLER CLASSES below ↓
 class ViewNews(DetailView):

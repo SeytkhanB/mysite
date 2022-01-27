@@ -5,7 +5,7 @@
 <div class="list-group">
     {% get_list_categories as categories %}
     {% for item_categories in categories %}
-    <a href="{% url 'category' item_categories.pk %}" class="list-group-item list-group-item-action">{{ item_categories.title }}</a>
+        <a href="{% url 'category' item_categories.pk %}" class="list-group-item list-group-item-action">{{ item_categories.title }}</a>
     {% endfor %}
 </div>
 
