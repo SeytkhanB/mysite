@@ -1,0 +1,27 @@
+
+
+{% extends 'base.html' %}
+
+{% block title %}
+    Test page
+{% endblock %}
+
+
+{% block news_item_title %}
+    {{ news_item.title }}
+{% endblock %}
+
+
+{% block sidebar %}
+{% include 'inc/_sidebar.html' %}
+{% endblock %}
+
+
+{% block content %}
+
+    {% for item in page_obj.object_list %}
+        <p>{{ item }}</p>
+    {% endfor %}
+
+{% endblock %}
+

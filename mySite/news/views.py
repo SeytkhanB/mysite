@@ -1,12 +1,24 @@
 
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import ListView, DetailView, CreateView
+from django.urls import reverse_lazy
 
+from django.views.generic import ListView, DetailView, CreateView
 from .models import News, Category
 from .forms import NewsForm
-from django.urls import reverse_lazy
 from .utils import MyMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
+
+
+# This is controller functions
+
+def forTest(request):
+    objects = ['john1', 'paul2', 'george3', 'ringo4', 'john5', 'paul6', 'george7']
+    paginator = Paginator(objects, 2)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'news/forTest.html', {'page_obj': page_obj})
+
 
 
 # Changing controller functions to controller CLASSES below ↓
@@ -16,6 +28,7 @@ class HomeNews(MyMixin, ListView):
     context_object_name = 'news'
     mixin_prop = 'hello world this is mixin'
     # extra_context = {'title': 'Main'}
+    paginate_by = 2
 
     # if we don't use method get_queryset(self): which is below then
     # here we should use queryset like ↓
@@ -48,6 +61,7 @@ class NewsByCategory(MyMixin, ListView):
     template_name = 'news/home_news_list.html'
     context_object_name = 'news'
     allow_empty = False
+    paginate_by = 2
 
     # if we don't use method get_queryset(self): which is below then
     # here we should use queryset like ↓
