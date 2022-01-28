@@ -1,23 +1,45 @@
-
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.core.paginator import Paginator
 
 from django.views.generic import ListView, DetailView, CreateView
 from .models import News, Category
-from .forms import NewsForm, UserRegisterForm
+from .forms import NewsForm, UserRegisterForm, UserLoginForm, ContactForm
 from .utils import MyMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+from django.contrib.auth import login, logout
+from django.core.mail import send_mail
+
+
+def test(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            mail = send_mail(form.cleaned_data['subject'], form.cleaned_data['content'],
+                             'seytkhanbalikbaev@gmail.com',
+                             ['Seyit.Ryskeldiev@icloud.com'], fail_silently=False)
+                            # when you deploy project turn off the fail_silently to True
+            if mail:
+                messages.success(request, 'Message sent successfully')
+                return redirect('forTest')
+            else:
+                messages.error(request, 'Send error')
+        else:
+            messages.error(request, 'Something went wrong')
+    else:
+        form = ContactForm()
+    return render(request, 'news/forTest.html', {'form': form})
 
 
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            login(request, user)
             messages.success(request, 'You have successfully registered')
-            return redirect('login')
+            return redirect('home')
         else:
             messages.error(request, 'Error registration')
     else:
@@ -25,8 +47,21 @@ def register(request):
     return render(request, 'news/register.html', {'form': form})
 
 
-def login(request):
-    return render(request, 'news/login.html')
+def user_login(request):
+    if request.method == 'POST':
+        form = UserLoginForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('home')
+    else:
+        form = UserLoginForm()
+    return render(request, 'news/login.html', {'form': form})
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('login')
 
 
 # This is controller functions
@@ -47,12 +82,11 @@ class HomeNews(MyMixin, ListView):
     context_object_name = 'news'
     mixin_prop = 'hello world this is mixin'
     # extra_context = {'title': 'Main'}
-    paginate_by = 2                         # adding pagination to the page
+    paginate_by = 2  # adding pagination to the page
 
     # if we don't use method get_queryset(self): which is below then
     # here we should use queryset like ↓
     # queryset = News.objects.select_related('category')
-
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(HomeNews, self).get_context_data(**kwargs)
@@ -62,6 +96,7 @@ class HomeNews(MyMixin, ListView):
 
     def get_queryset(self):
         return News.objects.filter(is_published=True).select_related('category')
+
 
 # This is controller functions
 """
@@ -87,7 +122,6 @@ class NewsByCategory(MyMixin, ListView):
     # here we should use queryset like ↓
     # queryset = News.objects.select_related('category')
 
-
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(NewsByCategory, self).get_context_data(**kwargs)
         context['title'] = self.get_upper(Category.objects.get(pk=self.kwargs['category_id']))
@@ -95,6 +129,7 @@ class NewsByCategory(MyMixin, ListView):
 
     def get_queryset(self):
         return News.objects.filter(category_id=self.kwargs['category_id'], is_published=True).select_related('category')
+
 
 # This is controller functions
 """
@@ -119,6 +154,7 @@ class ViewNews(DetailView):
     # template_name = 'news/news_detail.html'   # this line is using by default
     context_object_name = 'news_item'
 
+
 # This is controller functions
 """
 def view_news(request, news_id):
@@ -138,7 +174,8 @@ class CreateNews(LoginRequiredMixin, CreateView):
 
     # login_url = '/admin/'                     # we will go to the admin
     # login_url = reverse_lazy('home')          # we will go to the home page
-    raise_exception = True                      # we will go to the 403 page
+    raise_exception = True  # we will go to the 403 page
+
 
 # This is controller functions
 """
@@ -153,4 +190,3 @@ def add_news(request):
         form = NewsForm
     return render(request, 'news/add_news.html', {'form': form})
 """
-

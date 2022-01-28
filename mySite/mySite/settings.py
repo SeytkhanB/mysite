@@ -1,3 +1,4 @@
+
 """
 Django settings for mySite project.
 
@@ -113,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'en'        # default -> en-us
+LANGUAGE_CODE = 'en-us'        # default -> en-us
 
 TIME_ZONE = 'UTC'
 
@@ -136,8 +137,15 @@ MEDIA_URL = '/media/'
 
 INTERNAL_IPS = ["127.0.0.1"]
 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 465    # 2525
+EMAIL_HOST_USER = 'seytkhanbalikbaev@gmail.com'
+EMAIL_HOST_PASSWORD = 'ffhhgsgsb'
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+

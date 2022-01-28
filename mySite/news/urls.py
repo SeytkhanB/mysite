@@ -1,15 +1,18 @@
 
 
 from django.urls import path
-from .views import HomeNews, NewsByCategory, ViewNews, CreateNews, register, login
+from .views import HomeNews, NewsByCategory, ViewNews, CreateNews, register, user_login, user_logout, test
+
 
 urlpatterns = [
     path('register/', register, name='register'),
 
-    path('login/', login, name='login'),
+    path('login/', user_login, name='login'),
+
+    path('logout/', user_logout, name='logout'),
 
     # path('test/', forTest, name='fotTest'),
-    path('test/', HomeNews.as_view(), name='forTest'),
+    path('test/', test, name='forTest'),
 
     # path('', index, name='home'),
     path('', HomeNews.as_view(), name='home'),
