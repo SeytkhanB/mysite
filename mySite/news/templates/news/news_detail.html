@@ -31,7 +31,7 @@
         {% endif %}
 
         <h5 class="card-title">{{ news_item.title }}</h5>
-        <p class="card-text">{{ news_item.content|linebreaksbr }}</p>
+        <p class="card-text">{{ news_item.content|safe|linebreaksbr }}</p>
 
     </div>
     <div class="card-footer text-muted">

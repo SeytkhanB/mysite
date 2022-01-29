@@ -5,12 +5,14 @@ from django import forms
 from .models import News
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+from captcha.fields import CaptchaField, CaptchaTextInput
 
 
 
 class ContactForm(forms.Form):
     subject = forms.CharField(label='Subject', widget=forms.TextInput(attrs={'class': 'form-control'}))
     content = forms.CharField(label='Content', widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5}))
+    captcha = CaptchaField()
 
 
 class UserLoginForm(AuthenticationForm):
@@ -25,6 +27,7 @@ class UserRegisterForm(UserCreationForm):
     password2 = forms.CharField(label='Confirm the password', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     email = forms.EmailField(label='E-mail', help_text='Please use the correct email address',
                              widget=forms.EmailInput(attrs={'class': 'form-control'}))
+    captcha = CaptchaField()
 
     class Meta:
         model = User

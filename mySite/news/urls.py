@@ -1,7 +1,8 @@
 
 
+from django.views.decorators.cache import cache_page
 from django.urls import path
-from .views import HomeNews, NewsByCategory, ViewNews, CreateNews, register, user_login, user_logout, test
+from .views import HomeNews, NewsByCategory, ViewNews, CreateNews, register, user_login, user_logout, feedback
 
 
 urlpatterns = [
@@ -12,9 +13,10 @@ urlpatterns = [
     path('logout/', user_logout, name='logout'),
 
     # path('test/', forTest, name='fotTest'),
-    path('test/', test, name='forTest'),
+    path('feedback/', feedback, name='feedback'),
 
     # path('', index, name='home'),
+    # path('', cache_page(60)(HomeNews.as_view()), name='home'),  # cache_page   is caching
     path('', HomeNews.as_view(), name='home'),
 
     # path('category/<int:category_id>/', get_category, name='category'),

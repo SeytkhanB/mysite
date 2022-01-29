@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.core.paginator import Paginator
@@ -12,7 +13,7 @@ from django.contrib.auth import login, logout
 from django.core.mail import send_mail
 
 
-def test(request):
+def feedback(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
@@ -22,14 +23,14 @@ def test(request):
                             # when you deploy project turn off the fail_silently to True
             if mail:
                 messages.success(request, 'Message sent successfully')
-                return redirect('forTest')
+                return redirect('feedback')
             else:
                 messages.error(request, 'Send error')
         else:
-            messages.error(request, 'Something went wrong')
+            messages.error(request, 'Validation error')
     else:
         form = ContactForm()
-    return render(request, 'news/forTest.html', {'form': form})
+    return render(request, 'news/feedback.html', {'form': form})
 
 
 def register(request):
@@ -71,7 +72,7 @@ def forTest(request):
     paginator = Paginator(objects, 2)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'news/forTest.html', {'page_obj': page_obj})
+    return render(request, 'news/feedback.html', {'page_obj': page_obj})
 """
 
 

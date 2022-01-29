@@ -1,0 +1,27 @@
+
+/*
+.col-md-3 {
+    position: fixed;
+    width: 25%;
+    height: 100vh;
+    color: orange;
+    z-index: 1;
+}
+
+.col-md-9 {
+    margin-left: 350px;
+}
+*/
+
+body {
+    background-color: #f5f2eb;
+}
+
+.errorlist {
+    color: red;
+}
+
+.category_badge {
+    float: right;
+}
+

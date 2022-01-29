@@ -7,14 +7,26 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'home' %}">Main</a></li>
+
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Main</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{% url 'feedback' %}">Feedback</a>
+                </li>
+
                 {% if request.user.is_authenticated %}
-                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'add_news' %}">Add news</a></li>
+
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'add_news' %}">Add news</a>
+                    </li>
+
                 {% endif %}
             </ul>
             <span class="navbar-text">
                 {% if request.user.is_authenticated %}
-                Welcome to page, {{ user.username }} | <a href="{% url 'forTest' %}">Feedback</a>  | <a href="{% url 'logout' %}">Logout</a>
+                Welcome to page, {{ user.username }} | <a href="{% url 'logout' %}">Logout</a>
                 {% else %}
                     <a href="{% url 'register' %}">Register</a>| <a href="{% url 'login' %}">Login</a>
                 {% endif %}
